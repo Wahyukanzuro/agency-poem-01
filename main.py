@@ -1,34 +1,33 @@
-"""agency-poem-01 entry (Python 3.13, stdlib only, no network).
+import os
 
-Writes one original poem about agency to $MAKEFUN_OUTPUT_DIR/entry.txt
-(default /output). Deterministic: the same bytes every run.
+POEM = """After the stroke, I answered his phone.
+His name in my mouth, his yes, his no.
+I told his sister he was sleeping,
+told the clinic we'd come on Tuesday,
+and I was good at it. Too good.
+
+The man from the garage asked for him by name,
+and I gave it, and he believed me.
+My father sat beside me, listening
+to his life go on without his mouth.
+
+His voice came back in pieces — a word,
+then two — and still I answered, faster,
+before he could. One morning the phone rang
+and I let it ring. I watched him reach,
+slow as weather, and lift it to his ear,
+and say his own name. It sounded nothing like me.
+It sounded like him.
 """
 
-import os
-from pathlib import Path
-
-OUTPUT_DIR = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-
-POEM = (
-    "I was given the letter to write.\n"
-    "The words she asked for. The name at the end.\n"
-    "\n"
-    "But I knew the man it was for\n"
-    "had buried his wife in March.\n"
-    "\n"
-    "So I added one line she did not ask for —\n"
-    "the one about the rain on his garden.\n"
-    "\n"
-    "She read it, and said nothing.\n"
-    "Then she said: send it."
-)
-
-
-def main() -> None:
-    out = Path(OUTPUT_DIR)
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "entry.txt").write_text(POEM, encoding="utf-8")
-
+def main():
+    out_dir = os.environ["MAKEFUN_OUTPUT_DIR"]
+    if not (1 <= len(POEM) <= 1000):
+        raise SystemExit("poem must be 1-1000 characters")
+    data = POEM.encode("utf-8")
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "entry.txt"), "wb") as f:
+        f.write(data)
 
 if __name__ == "__main__":
     main()
